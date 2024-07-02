@@ -11,84 +11,93 @@ class MyApp extends StatelessWidget {
   final GoRouter _router = GoRouter(
     initialLocation: '/main',
     routes: [
-      ShellRoute(
-        navigatorKey: GlobalKey<NavigatorState>(),
+      StatefulShellRoute.indexedStack(
         builder: (context, state, child) {
           return MainScreen(child: child);
         },
-        routes: [
-          GoRoute(
-            path: '/main',
-            pageBuilder: (context, state) {
-              return NoTransitionPage(
-                key: state.pageKey,
-                child: FirstScreen(),
-              );
-            },
-          ),
-          GoRoute(
-            path: '/home',
-            pageBuilder: (context, state) {
-              return NoTransitionPage(
-                key: state.pageKey,
-                child: HomeScreen(),
-              );
-            },
+        branches: [
+          StatefulShellBranch(
             routes: [
               GoRoute(
-                path: 'details',
+                path: '/main',
                 pageBuilder: (context, state) {
-                  return MaterialPage(
+                  return NoTransitionPage(
                     key: state.pageKey,
-                    child: DetailsScreen(
-                      title: 'Home Details',
-                    ),
+                    child: FirstScreen(),
                   );
                 },
               ),
             ],
           ),
-          GoRoute(
-            path: '/business',
-            pageBuilder: (context, state) {
-              return NoTransitionPage(
-                key: state.pageKey,
-                child: BusinessScreen(),
-              );
-            },
+          StatefulShellBranch(
             routes: [
               GoRoute(
-                path: 'details',
+                path: '/home',
                 pageBuilder: (context, state) {
-                  return MaterialPage(
+                  return NoTransitionPage(
                     key: state.pageKey,
-                    child: DetailsScreen(
-                      title: 'Business Details',
-                    ),
+                    child: HomeScreen(),
                   );
                 },
+                routes: [
+                  GoRoute(
+                    path: 'details',
+                    pageBuilder: (context, state) {
+                      return MaterialPage(
+                        key: state.pageKey,
+                        child: DetailsScreen(title: 'Home Details'),
+                      );
+                    },
+                  ),
+                ],
               ),
             ],
           ),
-          GoRoute(
-            path: '/school',
-            pageBuilder: (context, state) {
-              return NoTransitionPage(
-                key: state.pageKey,
-                child: SchoolScreen(),
-              );
-            },
+          StatefulShellBranch(
             routes: [
               GoRoute(
-                path: 'details',
+                path: '/business',
                 pageBuilder: (context, state) {
-                  return MaterialPage(
+                  return NoTransitionPage(
                     key: state.pageKey,
-                    child: DetailsScreen(
-                      title: 'School Details',
-                    ),
+                    child: BusinessScreen(),
                   );
                 },
+                routes: [
+                  GoRoute(
+                    path: 'details',
+                    pageBuilder: (context, state) {
+                      return MaterialPage(
+                        key: state.pageKey,
+                        child: DetailsScreen(title: 'Business Details'),
+                      );
+                    },
+                  ),
+                ],
+              ),
+            ],
+          ),
+          StatefulShellBranch(
+            routes: [
+              GoRoute(
+                path: '/school',
+                pageBuilder: (context, state) {
+                  return NoTransitionPage(
+                    key: state.pageKey,
+                    child: SchoolScreen(),
+                  );
+                },
+                routes: [
+                  GoRoute(
+                    path: 'details',
+                    pageBuilder: (context, state) {
+                      return MaterialPage(
+                        key: state.pageKey,
+                        child: DetailsScreen(title: 'School Details'),
+                      );
+                    },
+                  ),
+                ],
               ),
             ],
           ),
