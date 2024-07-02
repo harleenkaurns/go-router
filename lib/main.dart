@@ -10,26 +10,47 @@ class MyApp extends StatelessWidget {
 
   final GoRouter _router = GoRouter(
     initialLocation: '/main',
+    
     routes: [
+       GoRoute(
+        path: '/main',
+        pageBuilder: (context, state) {
+          return MaterialPage(
+            key: state.pageKey,
+            child: FirstScreen(),
+          );
+        },
+      ),
       StatefulShellRoute.indexedStack(
-        builder: (context, state, child) {
-          return MainScreen(child: child);
+        builder: (context, __, shell) {
+          return Scaffold(
+      body: shell,
+      bottomNavigationBar: NavigationBar(
+              labelBehavior: NavigationDestinationLabelBehavior.alwaysShow,
+              destinations: const [
+                 NavigationDestination(
+            icon: Icon(Icons.home),
+            label: 'Home',
+          ),
+          NavigationDestination(
+            icon: Icon(Icons.business),
+            label: 'Business',
+          ),
+          NavigationDestination(
+            icon: Icon(Icons.school),
+            label: 'School',
+          ),
+              ],
+              selectedIndex: shell.currentIndex,
+              onDestinationSelected: (index) => shell.goBranch(
+                index,
+                initialLocation: index == shell.currentIndex,
+              ),
+      ),
+    );
         },
         branches: [
-          StatefulShellBranch(
-            routes: [
-              GoRoute(
-                path: '/main',
-                pageBuilder: (context, state) {
-                  return NoTransitionPage(
-                    key: state.pageKey,
-                    child: FirstScreen(),
-                  );
-                },
-              ),
-            ],
-          ),
-          StatefulShellBranch(
+         StatefulShellBranch(
             routes: [
               GoRoute(
                 path: '/home',
@@ -187,18 +208,20 @@ class HomeScreen extends StatelessWidget {
 class FirstScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return Center(
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          Text('First Screen'),
-          ElevatedButton(
-            onPressed: () {
-              context.go('/home');
-            },
-            child: Text('Go to Details'),
-          ),
-        ],
+    return Scaffold(
+      body: Center(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Text('First Screen'),
+            ElevatedButton(
+              onPressed: () {
+                context.go('/home');
+              },
+              child: Text('Go to Details'),
+            ),
+          ],
+        ),
       ),
     );
   }
